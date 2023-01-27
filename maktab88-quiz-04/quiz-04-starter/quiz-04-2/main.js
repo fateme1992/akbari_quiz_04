@@ -1,20 +1,43 @@
 const tableHead = document.querySelector('thead');
 const tableBody = document.querySelector('tbody');
 
-const renderTable = () => {
+let sort = null;
+
+const renderTable = (sortBy = null) => {
 	tableHead.innerHTML = `
 		<tr>
 			<th scope="col">No.</th>
 			<th scope="col">Tour ID</th>
 			<th scope="col">Name</th>
 			<th scope="col">Location</th>
-			<th scope="col">Price</th>
+			<th scope="col" onclick="isort()"	>Price</th>
 			<th scope="col">Group Size</th>
 			<th scope="col">difficulty</th>
 			<th scope="col">duration</th>
 			<th scope="col">Ratings Average</th>
 			<th scope="col">Ratings Quantity</th>
 		</tr>`;
+
+	let params = (new URL(document.location)).searchParams;
+	if (sortBy === null)
+		sortBy = params.get("sort") === null ? 'default' : params.get("sort");
+
+	console.log('sortBy:', sortBy);
+
+	if (sortBy === '-price') {
+		itours = tours.sort((a, b) => {
+			if (a.price > b.price) return -1; else return 1;
+		});
+
+	} else if (sortBy === 'price') {
+		itours = tours.sort((a, b) => {
+			if (a.price > b.price) return 1; else return -1;
+		});
+	} else {
+		itours = tours;
+	}
+
+	tableBody.innerHTML = '';
 
 	let rowCount = 1;
 	for (const tour of tours) {
@@ -37,3 +60,13 @@ const renderTable = () => {
 };
 
 renderTable();
+
+function isort() {
+
+	if (sort === null)
+		renderTable('default');
+	else if (sort === '-price')
+		renderTable('-price');
+	else
+		renderTable('price');
+}
