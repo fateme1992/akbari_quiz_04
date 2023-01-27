@@ -16,8 +16,22 @@ const renderTable = () => {
 			<th scope="col">Ratings Quantity</th>
 		</tr>`;
 
+	let params = (new URL(document.location)).searchParams;
+
+
+	let condition = ["id", "location", "ratingsAverage", "ratingsQuantity", "name", "duration", "maxGroupSize", "difficulty", "price"]
+	let itours = tours;
+	for (let i = 0; i < condition.length; i++) {
+
+		if (params.get(condition[i]) !== null) {
+			console.log(params.get(condition[i]));
+			itours = tours.filter(items => items[condition[i]] == params.get(condition[i]))
+		}
+
+	}
+
 	let rowCount = 1;
-	for (const tour of tours) {
+	for (const tour of itours) {
 		tableBody.innerHTML += `
 			<tr>
 				<th scope="row">${rowCount}</th>
